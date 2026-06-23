@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Login / Register -->
+    <div id="auth-screen" class="screen">
+      <div class="auth-card">
+        <div class="logo">💰 Expense Tracker</div>
+        <p class="subtitle">Track your spending. Simple and free.</p>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="login">Login</button>
+          <button class="tab" data-tab="register">Sign up</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required />
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="Your password" required />
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+
+        <form id="register-form" class="auth-form hidden">
+          <label>Full name</label>
+          <input type="text" id="register-name" placeholder="Your name" required />
+          <label>Email</label>
+          <input type="email" id="register-email" placeholder="you@example.com" required />
+          <label>Password</label>
+          <input type="password" id="register-password" placeholder="At least 8 characters" minlength="8" required />
+          <button type="submit" class="btn btn-primary">Create account</button>
+        </form>
+
+        <p id="auth-error" class="error hidden"></p>
+      </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-screen" class="screen hidden">
+      <header class="header">
+        <div class="header-left">
+          <span class="logo-small">💰 Expense Tracker</span>
+        </div>
+        <div class="header-right">
+          <span id="user-greeting"></span>
+          <button id="logout-btn" class="btn btn-ghost">Logout</button>
+        </div>
+      </header>
+
+      <main class="container">
+        <!-- Summary cards -->
+        <section class="summary-row">
+          <div class="card summary-card">
+            <span class="card-label">Total spent</span>
+            <span id="total-amount" class="card-value">₹0.00</span>
+          </div>
+          <div class="card summary-card">
+            <span class="card-label">Transactions</span>
+            <span id="total-count" class="card-value">0</span>
+          </div>
+          <div class="card summary-card">
+            <span class="card-label">Top category</span>
+            <span id="top-category" class="card-value small">—</span>
+          </div>
+        </section>
+
+        <div class="grid">
+          <!-- Add expense -->
+          <section class="card">
+            <h2>Add expense</h2>
+            <form id="expense-form">
+              <label>What did you spend on?</label>
+              <input type="text" id="expense-title" placeholder="e.g. Lunch, Groceries" required />
+
+              <label>Amount (₹)</label>
+              <input type="number" id="expense-amount" placeholder="0.00" min="0.01" step="0.01" required />
+
+              <label>Category</label>
+              <select id="expense-category" required></select>
+
+              <label>Date</label>
+              <input type="date" id="expense-date" required />
+
+              <label>Notes <span class="optional">(optional)</span></label>
+              <input type="text" id="expense-notes" placeholder="Any details..." />
+
+              <button type="submit" class="btn btn-primary full">Add expense</button>
+            </form>
+            <p id="expense-msg" class="success hidden"></p>
+          </section>
+
+          <!-- Category breakdown -->
+          <section class="card">
+            <h2>Spending by category</h2>
+            <div id="category-chart" class="category-list">
+              <p class="empty">Add expenses to see breakdown</p>
+            </div>
+          </section>
+        </div>
+
+        <!-- Expense list -->
+        <section class="card">
+          <div class="section-header">
+            <h2>Recent expenses</h2>
+            <button id="refresh-btn" class="btn btn-ghost">Refresh</button>
+          </div>
+          <div id="expense-list" class="expense-list">
+            <p class="empty">No expenses yet. Add your first one above!</p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>Built for easy expense tracking</span>
+        <a href="/docs" target="_blank">Developer API docs</a>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
