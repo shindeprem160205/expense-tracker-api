@@ -331,6 +331,3 @@ Copy `.env.example` to `.env` and adjust as needed:
 
 ---
 
-## License
-
-This project is licensed under the MIT License.
