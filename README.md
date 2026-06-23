@@ -1,303 +1,336 @@
-# Expense Tracker REST API
+# Expense Tracker API
 
-A production-quality **Expense Tracker REST API** built with **FastAPI**, **PostgreSQL**, **SQLAlchemy**, and **JWT authentication** — designed as a portfolio project for software engineering freshers.
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-D71F00)](https://sqlalchemy.org)
+[![pytest](https://img.shields.io/badge/Tests-pytest-0A9EDC?logo=pytest&logoColor=white)](https://pytest.org)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[Python](https://python.org)
-[FastAPI](https://fastapi.tiangolo.com)
-[PostgreSQL](https://postgresql.org)
-[Docker](https://docker.com)
+A full-stack **Expense Tracker** application with a REST API backend and a built-in web interface. Track daily spending, organize expenses by category, and view analytics — all from your browser.
+
+Built with **FastAPI**, **SQLAlchemy**, **JWT authentication**, and **pytest**. Suitable as a portfolio project for backend and full-stack roles.
+
+**Live repository:** [github.com/shindeprem160205/expense-tracker-api](https://github.com/shindeprem160205/expense-tracker-api)
+
+---
+
+## Overview
+
+| Layer | Description |
+|-------|-------------|
+| **Web App** | User-friendly UI at `http://localhost:8000` — sign up, add expenses, view totals |
+| **REST API** | Versioned endpoints under `/api/v1` with JWT protection |
+| **Database** | SQLite for local development · PostgreSQL for Docker/production |
+| **Documentation** | Auto-generated Swagger UI at `/docs` |
 
 ---
 
 ## Features
 
-- **User Authentication** — Register, login, JWT tokens, bcrypt password hashing
-- **Expense Management** — Full CRUD with categories, date filtering, pagination
-- **Analytics** — Monthly summary, category-wise spending, total expenses
-- **API Documentation** — Auto-generated Swagger UI and OpenAPI spec
-- **Docker Support** — One-command deployment with PostgreSQL
-- **Test Suite** — pytest with 20+ integration tests
+- **Authentication** — User registration, login, JWT tokens, bcrypt password hashing
+- **Expense Management** — Create, read, update, delete expenses with categories and date filters
+- **Analytics** — Monthly summaries, category-wise spending breakdown, grand totals
+- **Web Interface** — Clean browser UI — no Postman or Swagger required for end users
+- **API Documentation** — Interactive OpenAPI docs (Swagger UI + ReDoc)
+- **Testing** — 17 integration tests with pytest
+- **Docker Ready** — Optional Docker Compose setup with PostgreSQL
 
 ---
 
-## Quick Start (Windows — easiest)
+## How to Run
+
+Choose the method that fits your setup. **Method 1 is recommended** for Windows users with no Docker installed.
+
+---
+
+### Method 1 — One-Click Start (Windows, Recommended)
+
+**Requirements:** Python 3.12+ installed
 
 ```powershell
-git clone https://github.com/yourusername/expense-tracker-api.git
+git clone https://github.com/shindeprem160205/expense-tracker-api.git
 cd expense-tracker-api
 .\run.ps1
 ```
 
-Open **http://localhost:8000** — use the web app (no Swagger needed).
+The script will:
+1. Create a virtual environment (first run only)
+2. Install dependencies
+3. Create `.env` from template (first run only)
+4. Free port 8000 if an old server is running
+5. Open your browser automatically
 
-📁 **File-by-file code explanation:** [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)  
-🐙 **Push to GitHub:** [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)
+**Open the app:** [http://localhost:8000](http://localhost:8000)
+
+> **Stop the server:** Press `Ctrl+C` in the terminal.
 
 ---
 
-## Quick Start (Docker)
+### Method 2 — Manual Setup (Windows / macOS / Linux)
 
-```bash
-git clone https://github.com/yourusername/expense-tracker-api.git
+**Requirements:** Python 3.12+
+
+```powershell
+# 1. Clone the repository
+git clone https://github.com/shindeprem160205/expense-tracker-api.git
 cd expense-tracker-api
-cp .env.example .env
+
+# 2. Create and activate virtual environment
+python -m venv .venv
+
+# Windows
+.\.venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+
+# 3. Install dependencies
+pip install -r requirements-dev.txt
+
+# 4. Configure environment
+copy .env.example .env        # Windows
+# cp .env.example .env        # macOS / Linux
+
+# 5. Start the server
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Open the app:** [http://localhost:8000](http://localhost:8000)
+
+| URL | Purpose |
+|-----|---------|
+| [http://localhost:8000](http://localhost:8000) | Web application (for users) |
+| [http://localhost:8000/docs](http://localhost:8000/docs) | Swagger API documentation (for developers) |
+| [http://localhost:8000/health](http://localhost:8000/health) | Health check endpoint |
+
+---
+
+### Method 3 — Docker (PostgreSQL + API)
+
+**Requirements:** [Docker Desktop](https://docs.docker.com/desktop/) installed and running
+
+```powershell
+git clone https://github.com/shindeprem160205/expense-tracker-api.git
+cd expense-tracker-api
+copy .env.example .env
+```
+
+Update `.env` for PostgreSQL:
+
+```env
+DATABASE_URL=postgresql://expense_user:expense_pass@localhost:5432/expense_tracker
+```
+
+Start services:
+
+```powershell
 docker compose up --build -d
 ```
 
-Open **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+| Service | URL |
+|---------|-----|
+| Web App | [http://localhost:8000](http://localhost:8000) |
+| API Docs | [http://localhost:8000/docs](http://localhost:8000/docs) |
+| PostgreSQL | `localhost:5432` |
+
+Stop services:
+
+```powershell
+docker compose down
+```
+
+---
+
+### Method 4 — Run Tests
+
+```powershell
+# Activate virtual environment first, then:
+pip install -r requirements-dev.txt
+pytest -v
+```
+
+With coverage report:
+
+```powershell
+pytest --cov=app --cov-report=term-missing
+```
+
+---
+
+## Using the Application
+
+### Web Interface (Recommended)
+
+1. Open [http://localhost:8000](http://localhost:8000)
+2. Click **Sign up** and create an account
+3. Log in with your email and password
+4. Add expenses using the form on the dashboard
+5. View totals, category breakdown, and recent transactions
+
+No API knowledge required.
+
+### API (Developers)
+
+1. Open [http://localhost:8000/docs](http://localhost:8000/docs)
+2. Register via `POST /api/v1/auth/register`
+3. Click **Authorize** and log in with your credentials
+4. Test endpoints interactively
 
 ---
 
 ## Tech Stack
 
-
-| Technology       | Purpose             |
-| ---------------- | ------------------- |
-| Python 3.12      | Core language       |
-| FastAPI          | Web framework       |
-| PostgreSQL 16    | Relational database |
-| SQLAlchemy 2.0   | ORM                 |
-| Pydantic v2      | Data validation     |
-| python-jose      | JWT tokens          |
-| passlib + bcrypt | Password hashing    |
-| Docker           | Containerization    |
-| pytest           | Testing             |
-
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Python | 3.12 | Core language |
+| FastAPI | 0.115 | Web framework & OpenAPI docs |
+| Uvicorn | 0.32 | ASGI server |
+| SQLAlchemy | 2.0 | ORM & database abstraction |
+| Pydantic | v2 | Request/response validation |
+| SQLite | — | Local development database |
+| PostgreSQL | 16 | Production database (Docker) |
+| python-jose | 3.3 | JWT token handling |
+| bcrypt | 4.2 | Password hashing |
+| pytest | 8.3 | Integration testing |
+| Docker | — | Containerized deployment |
 
 ---
 
-## Project Architecture
-
-```
-Client → FastAPI Routers → Services → SQLAlchemy ORM → PostgreSQL
-```
-
-Detailed architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-
-### Folder Structure
+## Project Structure
 
 ```
 expense-tracker-api/
 ├── app/
-│   ├── main.py                 # Application entry point
-│   ├── config.py               # Settings
-│   ├── database.py             # DB engine & session
-│   ├── dependencies.py         # Auth dependency
-│   ├── models/                 # SQLAlchemy models
-│   ├── schemas/                # Pydantic schemas
-│   ├── routers/                # API routes
-│   ├── services/               # Business logic
-│   └── utils/security.py       # JWT & hashing
-├── tests/                      # pytest suite
-├── docs/                       # Technical documentation
+│   ├── main.py              # Application entry point
+│   ├── config.py            # Environment-based settings
+│   ├── database.py          # Database engine & sessions
+│   ├── dependencies.py      # JWT authentication dependency
+│   ├── models/              # SQLAlchemy ORM models
+│   ├── schemas/             # Pydantic request/response schemas
+│   ├── routers/             # API route handlers
+│   ├── services/            # Business logic layer
+│   ├── utils/security.py    # JWT & password utilities
+│   └── static/              # Web UI (HTML, CSS, JavaScript)
+├── tests/                   # pytest integration tests
+├── docs/                    # Technical documentation
+├── run.ps1                  # Windows one-click launcher
 ├── Dockerfile
 ├── docker-compose.yml
-└── requirements.txt
+├── requirements.txt
+└── requirements-dev.txt
 ```
 
----
-
-## Database Design
-
-### ER Diagram
-
-```
-USERS (1) ──────< CATEGORIES (1) ──────< EXPENSES
-  │                                          ▲
-  └──────────────────────────────────────────┘
-              (User owns Expenses directly)
-```
-
-
-| Entity         | Key Fields                                        |
-| -------------- | ------------------------------------------------- |
-| **users**      | email, hashed_password, full_name                 |
-| **categories** | name, user_id (unique per user)                   |
-| **expenses**   | title, amount, expense_date, category_id, user_id |
-
-
-Full schema: [docs/DATABASE.md](docs/DATABASE.md) | [docs/schema.sql](docs/schema.sql)
+**Detailed file-by-file explanation:** [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)
 
 ---
 
 ## API Endpoints
 
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `GET` | `/health` | Service health check | No |
+| `POST` | `/api/v1/auth/register` | Register a new user | No |
+| `POST` | `/api/v1/auth/login` | Login and receive JWT | No |
+| `GET` | `/api/v1/auth/me` | Get current user profile | Yes |
+| `GET` | `/api/v1/categories` | List user categories | Yes |
+| `POST` | `/api/v1/categories` | Create a category | Yes |
+| `POST` | `/api/v1/expenses` | Create an expense | Yes |
+| `GET` | `/api/v1/expenses` | List expenses (filterable) | Yes |
+| `GET` | `/api/v1/expenses/{id}` | Get a single expense | Yes |
+| `PUT` | `/api/v1/expenses/{id}` | Update an expense | Yes |
+| `DELETE` | `/api/v1/expenses/{id}` | Delete an expense | Yes |
+| `GET` | `/api/v1/analytics/monthly-summary` | Monthly spending totals | Yes |
+| `GET` | `/api/v1/analytics/category-spending` | Spending by category | Yes |
+| `GET` | `/api/v1/analytics/total` | Grand total & count | Yes |
 
-| Method | Endpoint                              | Description     | Auth |
-| ------ | ------------------------------------- | --------------- | ---- |
-| GET    | `/health`                             | Health check    | No   |
-| POST   | `/api/v1/auth/register`               | Register user   | No   |
-| POST   | `/api/v1/auth/login`                  | Get JWT token   | No   |
-| GET    | `/api/v1/auth/me`                     | Current user    | Yes  |
-| GET    | `/api/v1/categories`                  | List categories | Yes  |
-| POST   | `/api/v1/categories`                  | Create category | Yes  |
-| POST   | `/api/v1/expenses`                    | Create expense  | Yes  |
-| GET    | `/api/v1/expenses`                    | List expenses   | Yes  |
-| GET    | `/api/v1/expenses/{id}`               | Get expense     | Yes  |
-| PUT    | `/api/v1/expenses/{id}`               | Update expense  | Yes  |
-| DELETE | `/api/v1/expenses/{id}`               | Delete expense  | Yes  |
-| GET    | `/api/v1/analytics/monthly-summary`   | Monthly totals  | Yes  |
-| GET    | `/api/v1/analytics/category-spending` | By category     | Yes  |
-| GET    | `/api/v1/analytics/total`             | Grand total     | Yes  |
-
-
-Full API docs: [docs/API.md](docs/API.md)
+Full reference: [docs/API.md](docs/API.md)
 
 ---
 
-## Authentication Flow
+## Architecture
 
 ```
-Register → Login → Receive JWT → Send Bearer token on protected routes
+Browser (Web UI / API Client)
+         │
+         ▼
+   FastAPI Routers        ← HTTP layer, input validation
+         │
+         ▼
+   Services               ← Business logic
+         │
+         ▼
+   SQLAlchemy ORM          ← Data access
+         │
+         ▼
+   SQLite / PostgreSQL     ← Persistence
 ```
 
-Detailed flow: [docs/AUTH_FLOW.md](docs/AUTH_FLOW.md)
+- **Layered design** — Routers → Services → ORM for separation of concerns
+- **JWT authentication** — Stateless bearer tokens on all protected routes
+- **User-scoped data** — Every query filters by `user_id` for data isolation
+- **Auto OpenAPI** — Swagger UI generated from Pydantic schemas
 
-### JWT Workflow
-
-1. User logs in with email + password
-2. Server validates credentials (bcrypt)
-3. Server issues signed JWT (`sub=user_id`, `exp=30min`)
-4. Client sends `Authorization: Bearer <token>` on each request
-5. Server decodes JWT, loads user, executes request
+Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/AUTH_FLOW.md](docs/AUTH_FLOW.md)
 
 ---
 
-## Local Development
+## Environment Variables
 
-```bash
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements-dev.txt
-cp .env.example .env
-uvicorn app.main:app --reload
-```
+Copy `.env.example` to `.env` and adjust as needed:
 
----
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `sqlite:///./expense_tracker.db` | Database connection string |
+| `SECRET_KEY` | — | JWT signing secret (change in production) |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `30` | Token expiration time |
+| `CORS_ORIGINS` | `http://localhost:3000,...` | Allowed CORS origins |
+| `DEBUG` | `false` | Enable debug mode |
 
-## Running Tests
-
-```bash
-pip install -r requirements-dev.txt
-pytest -v
-pytest --cov=app --cov-report=term-missing
-```
-
-Testing guide: [docs/TESTING.md](docs/TESTING.md)
+> Never commit `.env` to version control. It is listed in `.gitignore`.
 
 ---
 
-## Docker Configuration
+## Troubleshooting
 
-```yaml
-# docker-compose.yml runs:
-# - postgres:16-alpine (port 5432)
-# - FastAPI API (port 8000)
-```
-
-Deployment guide: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
-
----
-
-## Security Best Practices
-
-- bcrypt password hashing
-- JWT with expiration
-- User-scoped data access
-- Pydantic input validation
-- Environment-based secrets
-- CORS configuration
-- SQL injection prevention via ORM
-
-Full guide: [docs/SECURITY.md](docs/SECURITY.md)
+| Issue | Solution |
+|-------|----------|
+| `docker: not recognized` | Use **Method 1** or **Method 2** — Docker is optional |
+| Port 8000 already in use | Run `.\run.ps1` (auto-fixes) or stop old server with `Ctrl+C` |
+| `{"detail":"Not Found"}` on `/` | Restart the server after pulling latest code |
+| `Repository not found` on push | Set correct remote: `git remote set-url origin https://github.com/shindeprem160205/expense-tracker-api.git` |
 
 ---
 
-## Why This Tech Stack?
+## Documentation
 
-### Why FastAPI?
-
-Modern Python framework with automatic OpenAPI docs, Pydantic validation, high performance, and minimal boilerplate. Industry adoption is growing rapidly for microservices and APIs.
-
-### Why PostgreSQL?
-
-ACID-compliant, production-proven relational database. Excellent for transactional data and analytics queries (GROUP BY, date functions). Foreign keys enforce data integrity.
-
-### Why JWT?
-
-Stateless authentication scales horizontally. No server-side session store needed. Standard for REST APIs consumed by SPAs and mobile apps.
-
-### Why SQLAlchemy?
-
-Python's most mature ORM. Type-safe 2.0 syntax, connection pooling, relationship management, and database portability between SQLite (tests) and PostgreSQL (production).
-
-### Why Docker?
-
-Consistent dev/prod environments. One command to run API + database. Demonstrates DevOps awareness expected in modern backend roles.
-
-### Why Swagger?
-
-FastAPI auto-generates interactive API documentation. Enables testing without Postman. Shows API design competency to interviewers.
+| Document | Description |
+|----------|-------------|
+| [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) | File-by-file code walkthrough |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design & request lifecycle |
+| [DATABASE.md](docs/DATABASE.md) | ER diagram & PostgreSQL schema |
+| [API.md](docs/API.md) | Complete endpoint reference |
+| [AUTH_FLOW.md](docs/AUTH_FLOW.md) | JWT authentication workflow |
+| [SECURITY.md](docs/SECURITY.md) | Security practices |
+| [TESTING.md](docs/TESTING.md) | Testing strategy |
+| [DEPLOYMENT.md](docs/DEPLOYMENT.md) | Cloud & Docker deployment |
+| [INTERVIEW_QA.md](docs/INTERVIEW_QA.md) | Interview questions & answers |
 
 ---
 
-## Resume-Ready Project Description
+## Resume Description
 
-> **Expense Tracker REST API** — Python, FastAPI, PostgreSQL, SQLAlchemy, JWT, Docker
->
-> Designed and built a production-ready REST API for personal expense management with user authentication, CRUD operations, and spending analytics. Implemented JWT-based auth with bcrypt password hashing, layered architecture (routers → services → ORM), and user-scoped data isolation. Integrated PostgreSQL with optimized indexes for analytics queries (monthly summaries, category-wise spending). Containerized with Docker Compose, documented with auto-generated Swagger/OpenAPI, and achieved full test coverage with pytest integration tests.
-
----
-
-## GitHub README Section (Copy-Paste)
-
-```markdown
-## 🏗️ Expense Tracker API
-
-Backend REST API for tracking personal expenses with analytics.
-
-**Stack:** Python · FastAPI · PostgreSQL · SQLAlchemy · JWT · Docker · pytest
-
-### Highlights
-- JWT authentication with bcrypt password hashing
-- Full expense CRUD with category management
-- Analytics: monthly summary, category breakdown, totals
-- Auto-generated Swagger/OpenAPI documentation
-- Docker Compose for one-command setup
-- 20+ pytest integration tests
-
-### Run locally
-docker compose up --build -d
-# → http://localhost:8000/docs
-```
+> **Expense Tracker API** — Python, FastAPI, SQLAlchemy, JWT, PostgreSQL, Docker  
+> Designed and built a full-stack expense management application with a REST API and web interface. Implemented JWT authentication with bcrypt, layered architecture (routers → services → ORM), user-scoped data isolation, SQL-based analytics, Docker deployment, and 17 pytest integration tests.  
+> **GitHub:** [github.com/shindeprem160205/expense-tracker-api](https://github.com/shindeprem160205/expense-tracker-api)
 
 ---
 
-## Interview Preparation
+## Author
 
-Common questions with detailed answers: [docs/INTERVIEW_QA.md](docs/INTERVIEW_QA.md)
-
----
-
-## Documentation Index
-
-
-| Document                                | Description                             |
-| --------------------------------------- | --------------------------------------- |
-| [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) | File-by-file code explanation |
-| [GITHUB_SETUP.md](docs/GITHUB_SETUP.md) | Push to GitHub guide |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Layered architecture & folder structure |
-| [DATABASE.md](docs/DATABASE.md)         | ER diagram & PostgreSQL schema          |
-| [API.md](docs/API.md)                   | Endpoint reference                      |
-| [AUTH_FLOW.md](docs/AUTH_FLOW.md)       | Authentication & JWT workflow           |
-| [SECURITY.md](docs/SECURITY.md)         | Security best practices                 |
-| [TESTING.md](docs/TESTING.md)           | pytest strategy                         |
-| [DEPLOYMENT.md](docs/DEPLOYMENT.md)     | Docker & cloud deployment               |
-| [INTERVIEW_QA.md](docs/INTERVIEW_QA.md) | Interview Q&A                           |
-
+**Prem Shinde** — [github.com/shindeprem160205](https://github.com/shindeprem160205)
 
 ---
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
